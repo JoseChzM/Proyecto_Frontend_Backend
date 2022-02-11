@@ -1,0 +1,33 @@
+<div>
+  <img src="/assets/img/users.png" id="icon" alt="User Icon" />
+</div>
+<form #signUpForm="ngForm" (ngSubmit)="signUpForm.valid && onSubmit(signUpForm)">
+  <input type="text" #fullName="ngModel" [(ngModel)]="userService.selectedUser.fullName" name="fullName" placeholder="Nombre completo"
+  required  [ngClass]="{'invalid-textbox' :signUpForm.submitted && !fullName.valid }">
+  <div *ngIf="signUpForm.submitted && !fullName.valid">
+    <label class="validation-message">Este campo es obligatorio.</label>
+  </div>
+  <input type="text" #email="ngModel" [(ngModel)]="userService.selectedUser.email" name="email" placeholder="Email"
+  required [pattern]="emailRegex"  [ngClass]="{'invalid-textbox' :signUpForm.submitted && !email.valid }">
+  <div *ngIf="signUpForm.submitted && email.errors">
+      <label *ngIf="email.errors.required" class="validation-message">Este campo es obligatorio.</label>
+    <label *ngIf="email.errors.pattern" class="validation-message">Correo invalido.</label>
+  </div>
+  <input type="password" #password="ngModel" [(ngModel)]="userService.selectedUser.password" name="password" placeholder="Password"
+  minlength="4" required [ngClass]="{'invalid-textbox' :signUpForm.submitted && !password.valid }">
+  <div *ngIf="signUpForm.submitted && password.errors">
+    <label *ngIf="password.errors.required" class="validation-message">Este campo es obligatorio.</label>
+    <label *ngIf="password.errors.minlength" class="validation-message">Introduce por lo menos 4 caracteres.</label>
+  </div>
+  <input type="submit" value="Registrarse">
+</form>
+
+<!-- Success message -->
+<div class="success" *ngIf="showSucessMessage">
+  Registro guardado
+</div>
+
+<!-- Error message -->
+<div class="alert" *ngIf="serverErrorMessages">
+  {{serverErrorMessages}}
+</div>
